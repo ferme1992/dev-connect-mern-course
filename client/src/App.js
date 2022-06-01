@@ -26,27 +26,19 @@ const App = () => {
   return (
     <Provider store={store}>
       <Router>
-        <Fragment>
+        <>
           <Navbar />
+          <Alert />
           <Routes>
-            <Route exact path='/' element={<Landing />} />
+            <Route path='/' element={<Landing />} />
+            <Route path='/register' element={<Register />} />
+            <Route path='/login' element={<Login />} />
+            <Route
+              path='dashboard'
+              element={<PrivateRoute component={Dashboard} />}
+            />
           </Routes>
-          <section className='container'>
-            <Alert />
-            <Routes>
-              <Route exact path='/register' element={<Register />} />
-              <Route exact path='/login' element={<Login />} />
-              <Route
-                path='/dashboard'
-                element={
-                  <PrivateRoute>
-                    <Dashboard />
-                  </PrivateRoute>
-                }
-              />
-            </Routes>
-          </section>
-        </Fragment>
+        </>
       </Router>
     </Provider>
   );

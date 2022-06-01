@@ -1,14 +1,25 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import Spinner from '../layout/Spinner';
 
-export default function PrivateRoute({ children }) {
-  let location = useLocation();
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const loading = useSelector((state) => state.auth.loading);
-  if (!isAuthenticated && !loading) {
-    return <Navigate to='/login' state={{ from: location }} replace />;
-  } else {
-    return children;
-  }
-}
+const PrivateRoute = ({
+  component: Component,
+  auth: { isAuthenticated, loading },
+}) => {
+  if (loading) return <Spinner />;
+  if (isAuthenticated) return <Component />;
+
+  return <Navigate to='/login' />;
+};
+
+PrivateRoute.propTypes = {
+  auth: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps)(PrivateRoute);
